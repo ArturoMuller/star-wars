@@ -1,0 +1,9 @@
+body {
+    background: #D3D3D3;
+    margin: 0;
+}
+h1,h2,h3,h4,a,p,li {
+    color: #000000;
+    font-family: 'Pathway Gothic One', sans-serif;
+    font-weight: normal;
+}
