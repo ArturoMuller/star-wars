@@ -1,6 +1,6 @@
 import { dbInit } from '$lib/store/db-store';
-import { browser } from '$app/environment';
-
-if (browser) {
-  await dbInit();
+export async function load({ browser }) {
+  if (browser) {
+    await dbInit();
+  }
 }
