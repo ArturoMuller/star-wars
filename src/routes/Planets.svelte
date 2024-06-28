@@ -1,20 +1,23 @@
 <script>
-	export let planets
+	import Link from '$lib/components/Link.svelte';
 
+	export let planets
+	const planetEndpoint = 'planets'
 </script>
 
 <div class="planets">
-	{#each planets as { name, climate, residents, terrain }}
-		<div class="planet-item">
-			<h1>{name}</h1>
-			<div class="planet-fields">
-				<div>Total residents: {residents.length} </div>
-				<div>Climate: {climate} </div>
-				<div>Terrain: {terrain} </div>
+	{#each planets as { name, climate, residents, terrain, url }}
+		<Link url={url} endpoint={planetEndpoint}>
+			<div class="planet-item">
+				<h1>{name}</h1>
+				<div class="planet-fields">
+					<div>Total residents: {residents.length} </div>
+					<div>Climate: {climate} </div>
+					<div>Terrain: {terrain} </div>
+				</div>
 			</div>
-		</div>
+		</Link>
 	{/each}
-
 </div>
 
 
@@ -38,9 +41,10 @@
         display: flex;
         justify-content: flex-start;
         gap: 16px; /* Space between fields */
+        flex: 1;
     }
 
-    .planet-fields span {
+    .planet-fields {
         flex: 1; /* Each field takes up an equal amount of space */
     }
 

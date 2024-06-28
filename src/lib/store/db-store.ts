@@ -70,8 +70,7 @@ export function addData(storeName, data) {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(storeName, 'readwrite');
     const store = transaction.objectStore(storeName);
-
-    const request = store.add(data);
+    const request = store.put(data);
 
     request.onsuccess = () => {
       resolve(request.result);
