@@ -1,8 +1,6 @@
 <script>
 	export let planets
-	export let next
 
-	export let previous
 </script>
 
 <div class="planets">
@@ -16,6 +14,7 @@
 			</div>
 		</div>
 	{/each}
+
 </div>
 
 
@@ -31,7 +30,7 @@
         border: 1px solid #ccc;
         border-radius: 8px;
         padding: 16px;
-        background-color: #f9f9f9;
+        background-color: rgba(249, 249, 249, 0.79);
     }
 
     .planet-fields {
