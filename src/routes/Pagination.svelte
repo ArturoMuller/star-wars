@@ -3,8 +3,12 @@
 	export let next
 </script>
 <div>
-	<a href={`?page=${previous}`}>previous</a>
-	<a href={`?page=${next}`}>next</a>
+	{#if previous}
+		<a href={previous? `?page=${previous}` : '/'}>previous</a>
+	{/if}
+	{#if next}
+		<a href={`?page=${next}`}>next</a>
+	{/if}
 </div>
 <style>
 
