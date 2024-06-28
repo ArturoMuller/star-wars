@@ -1,6 +1,5 @@
 import { SWAPI_PLANETS } from '$lib/api/endpoints';
 import { browser } from '$app/environment';
-import { dbInit } from '$lib/store/db-store';
 import { storePlanets } from '$lib/store/store-utils';
 
 export async function load({ fetch, url }) {
