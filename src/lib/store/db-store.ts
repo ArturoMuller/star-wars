@@ -122,7 +122,7 @@ export function getElem(storeName, key) {
       if (elem) {
         resolve(elem);
       } else {
-        reject(`${storeName} ${key} not found```);
+        resolve(undefined);
       }
     };
 
@@ -152,6 +152,27 @@ export function loadPlanets(page) {
     };
 
     txn.onerror = function (event) {
+      reject(event.target.error);
+    };
+  });
+}
+
+export function getElems(storeName, key) {
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(storeName, 'readonly');
+    const objectStore = transaction.objectStore(storeName);
+    const request = objectStore.getAll(key);
+
+    request.onsuccess = function (event) {
+      const elem = event.target.result;
+      if (elem) {
+        resolve(elem);
+      } else {
+        resolve(undefined);
+      }
+    };
+
+    request.onerror = function (event) {
       reject(event.target.error);
     };
   });
