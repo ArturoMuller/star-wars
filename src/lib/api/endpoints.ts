@@ -1,3 +1,1 @@
-
-export const swapiPlanets = 'https://swapi.dev/api/planets'
-
+export const SWAPI_PLANETS = 'https://swapi.dev/api/planets';

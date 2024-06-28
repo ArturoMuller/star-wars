@@ -1,6 +1,6 @@
-import {addData} from './db-store'
-import {getPlanets} from '$lib/api/endpoints';
-const storePlanets = async (apiCall) => {
-    const planets = await getPlanets(apiCall)
-    addData()
-}
+import { addBulk, addData } from './db-store';
+import { PLANET_STORE } from '$lib/store/constants';
+
+export const storePlanets = async (planets, page) => {
+  addBulk(PLANET_STORE, planets, page);
+};
