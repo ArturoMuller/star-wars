@@ -1,9 +1,15 @@
-import { PEOPLE_STORE, PLANET_STORE } from '$lib/store/constants';
+import {
+  PAGE,
+  PAGES_INDEX,
+  PAGES_STORE,
+  PEOPLE_STORE,
+  PLANET_STORE,
+} from '$lib/store/constants';
 
 let db;
 
 export const dbInit: () => Promise<IDBDatabase> = async () => {
-  return await openConnection('starWars', 6, (db) => {
+  return await openConnection('starWars', 10, (db) => {
     // version change transaction code goes here
   });
 };
@@ -22,7 +28,7 @@ function openConnection(
         const planetsObjectStore = db.createObjectStore(PLANET_STORE, {
           keyPath: 'url',
         });
-        planetsObjectStore.createIndex('index[page]', 'page', {
+        planetsObjectStore.createIndex(PAGES_INDEX, PAGE, {
           unique: false,
         });
       }
@@ -31,7 +37,13 @@ function openConnection(
           keyPath: 'url',
         });
       }
+      if (!db.objectStoreNames.contains(PAGES_STORE)) {
+        const peopleObjectStore = db.createObjectStore(PAGES_STORE, {
+          keyPath: PAGE,
+        });
+      }
       upgradeTxn(request.result);
+      resolve(request.result);
     };
     // Update completed successfully, DB connection is established
     request.onsuccess = () => {
@@ -96,6 +108,52 @@ export function addBulk(storeName, data, page = undefined) {
 
     transaction.onerror = () => {
       console.error('Transaction not opened due to error: ', transaction.error);
+    };
+  });
+}
+
+export function getElem(storeName, key) {
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(storeName, 'readonly');
+    const objectStore = transaction.objectStore(storeName);
+    const request = objectStore.get(key);
+
+    request.onsuccess = function (event) {
+      const elem = event.target.result;
+      if (elem) {
+        resolve(elem);
+      } else {
+        reject(`${storeName} ${key} not found```);
+      }
+    };
+
+    request.onerror = function (event) {
+      reject(event.target.error);
+    };
+  });
+}
+
+export function loadPlanets(page) {
+  return new Promise((resolve, reject) => {
+    const txn = db.transaction([PLANET_STORE, PAGES_STORE], 'readonly');
+    const planetStore = txn.objectStore(PLANET_STORE);
+    const pageStore = txn.objectStore(PAGES_STORE);
+    const planetIndex = planetStore.index(PAGES_INDEX);
+    const requestPlanet = planetIndex.getAll(page);
+    const requestPage = pageStore.get(page);
+    txn.oncomplete = function (event) {
+      if (requestPlanet.result && requestPage.result) {
+        const results = requestPlanet.result;
+        const { next, previous } = requestPage.result;
+        debugger;
+        resolve({ results, next, previous });
+      } else {
+        resolve(undefined);
+      }
+    };
+
+    txn.onerror = function (event) {
+      reject(event.target.error);
     };
   });
 }
