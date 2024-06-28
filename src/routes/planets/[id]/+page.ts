@@ -15,8 +15,10 @@ export async function load({ fetch, params }) {
       loadPeople(planetUrl),
     ]);
     const [planetData, peopleData] = cachedResults;
-
-    if (planetData && peopleData) {
+    const hasNoResidents = planetData && planetData.residents.length === 0;
+    const hasResidentsAndPeopleData =
+      planetData && planetData.residents.length > 0 && peopleData.length > 0;
+    if (hasNoResidents || hasResidentsAndPeopleData) {
       return {
         planet: planetData,
         residents: peopleData,

@@ -1,5 +1,10 @@
 import { addBulk, addData, getElem, getElems } from './db-store';
-import { PAGES_STORE, PEOPLE_STORE, PLANET_STORE } from '$lib/store/constants';
+import {
+  HOMEPLANET_INDEX,
+  PAGES_STORE,
+  PEOPLE_STORE,
+  PLANET_STORE,
+} from '$lib/store/constants';
 
 export const storePlanets = async (planets, page) => {
   addBulk(PLANET_STORE, planets, page);
@@ -18,7 +23,7 @@ export const loadPlanet = async (page) => {
 };
 
 export const loadPeople = async (planet) => {
-  return getElems(PEOPLE_STORE, planet);
+  return getElems(PEOPLE_STORE, HOMEPLANET_INDEX, planet);
 };
 
 export const storePeople = async (people) => {

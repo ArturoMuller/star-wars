@@ -1,4 +1,6 @@
 import {
+  HOMEPLANET,
+  HOMEPLANET_INDEX,
   PAGE,
   PAGES_INDEX,
   PAGES_STORE,
@@ -9,7 +11,7 @@ import {
 let db;
 
 export const dbInit: () => Promise<IDBDatabase> = async () => {
-  return await openConnection('starWars', 10, (db) => {
+  return await openConnection('starWars', 16, (db) => {
     // version change transaction code goes here
   });
 };
@@ -23,25 +25,25 @@ function openConnection(
     const request = indexedDB.open(dbName, version);
     // Version change transaction
     request.onupgradeneeded = function (event) {
+      debugger;
       db = request.result; // IDBDatabase
-      if (!db.objectStoreNames.contains(PLANET_STORE)) {
-        const planetsObjectStore = db.createObjectStore(PLANET_STORE, {
-          keyPath: 'url',
-        });
-        planetsObjectStore.createIndex(PAGES_INDEX, PAGE, {
-          unique: false,
-        });
-      }
-      if (!db.objectStoreNames.contains(PEOPLE_STORE)) {
-        const peopleObjectStore = db.createObjectStore(PEOPLE_STORE, {
-          keyPath: 'url',
-        });
-      }
-      if (!db.objectStoreNames.contains(PAGES_STORE)) {
-        const peopleObjectStore = db.createObjectStore(PAGES_STORE, {
-          keyPath: PAGE,
-        });
-      }
+      const planetsObjectStore = db.createObjectStore(PLANET_STORE, {
+        keyPath: 'url',
+      });
+      planetsObjectStore.createIndex(PAGES_INDEX, PAGE, {
+        unique: false,
+      });
+      const peopleObjectStore = db.createObjectStore(PEOPLE_STORE, {
+        keyPath: 'url',
+      });
+      peopleObjectStore.createIndex(HOMEPLANET_INDEX, HOMEPLANET, {
+        unique: false,
+      });
+
+      const pagesObjectStore = db.createObjectStore(PAGES_STORE, {
+        keyPath: PAGE,
+      });
+
       upgradeTxn(request.result);
       resolve(request.result);
     };
@@ -156,12 +158,12 @@ export function loadPlanets(page) {
   });
 }
 
-export function getElems(storeName, key) {
+export function getElems(storeName, index, key) {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(storeName, 'readonly');
     const objectStore = transaction.objectStore(storeName);
-    const request = objectStore.getAll(key);
-
+    const planetIndex = objectStore.index(index);
+    const request = planetIndex.getAll(key);
     request.onsuccess = function (event) {
       const elem = event.target.result;
       if (elem) {
