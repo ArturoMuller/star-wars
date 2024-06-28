@@ -93,7 +93,6 @@ export function addData(storeName, data) {
 
 export function addBulk(storeName, data, page = undefined) {
   return new Promise((resolve, reject) => {
-    debugger;
     const transaction = db.transaction(storeName, 'readwrite');
     const store = transaction.objectStore(storeName);
     const pageParams = page ? { page: page } : {};
