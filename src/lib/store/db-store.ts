@@ -1,6 +1,7 @@
-let db
+let db;
+
 export const dbInit: () => Promise<IDBDatabase> = async () => {
-    return await openConnection('starWars', 5, (db) => {
+    return await openConnection('starWars', 6, (db) => {
         // version change transaction code goes here
     });
 }
@@ -10,18 +11,22 @@ function openConnection(dbName: string, version: number, upgradeTxn: (db: IDBDat
         const request = indexedDB.open(dbName, version);
         // Version change transaction
         request.onupgradeneeded = function (event) {
-            debugger;
             db = request.result; // IDBDatabase
+            if (!db.objectStoreNames.contains('planet-store')) {
+                const planetsObjectStore = db.createObjectStore('planet-store', {
+                    keyPath: 'id',
+                });
+            }
+            if (!db.objectStoreNames.contains('people-store')) {
+                const peopleObjectStore = db.createObjectStore('people-store', {
+                    keyPath: 'id',
+                });
+            }
             upgradeTxn(request.result);
-            const planetsObjectStore = db.createObjectStore("planet-store", {
-                keyPath: "id",
-            });
-            const peopleObjectStore = db.createObjectStore("people-store", {
-                keyPath: "id",
-            });
         }
         // Update completed successfully, DB connection is established
         request.onsuccess = () => {
+            db = request.result; // IDBDatabase
             resolve(request.result);
         };
 
@@ -36,6 +41,31 @@ function openConnection(dbName: string, version: number, upgradeTxn: (db: IDBDat
         request.onblocked = () => {
             console.warn('Db is blocked');
             reject('db is blocked');
+        };
+    });
+}
+
+export function addData(storeName, data) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(storeName, 'readwrite');
+        const store = transaction.objectStore(storeName);
+
+        const request = store.add(data);
+
+        request.onsuccess = () => {
+            resolve(request.result);
+        };
+
+        request.onerror = () => {
+            reject(request.error);
+        };
+
+        transaction.oncomplete = () => {
+            console.log('Transaction completed: database modification finished.');
+        };
+
+        transaction.onerror = () => {
+            console.error('Transaction not opened due to error: ', transaction.error);
         };
     });
 }

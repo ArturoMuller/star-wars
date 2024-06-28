@@ -1,6 +1,7 @@
 <script>
     import Planets from './Planets.svelte';
+    export let data
 </script>
 <section>
-    <Planets/>
+    <Planets planets={data.planets} next={data.next} />
 </section>
