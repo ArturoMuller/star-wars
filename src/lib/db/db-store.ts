@@ -128,8 +128,8 @@ export function loadPage(db, page) {
     txn.oncomplete = function (event) {
       if (requestPlanet.result && requestPage.result) {
         const results = requestPlanet.result;
-        const { next, previous } = requestPage.result;
-        resolve({ results, next, previous });
+        const { nextPage, previousPage } = requestPage.result;
+        resolve({ results, nextPage, previousPage });
       } else {
         resolve(undefined);
       }

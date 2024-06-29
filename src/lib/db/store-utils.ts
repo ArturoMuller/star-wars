@@ -26,9 +26,9 @@ const storePlanets = async (planets, page) => {
   return addBulk(db, PLANET_STORE, planets, page);
 };
 
-const storePages = async ({ page, next, previous }) => {
+const storePages = async ({ page, nextPage, previousPage }) => {
   const db = await dbPromise;
-  return addData(db, PAGES_STORE, { page, next, previous });
+  return addData(db, PAGES_STORE, { page, nextPage, previousPage });
 };
 
 const storePlanet = async (planet) => {

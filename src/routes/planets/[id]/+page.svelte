@@ -1,6 +1,5 @@
 <script>
 	import Planet from './Planet.svelte';
-
 	export let data
 </script>
 <section>
