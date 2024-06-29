@@ -38,9 +38,7 @@ function openConnection(
       const pagesObjectStore = db.createObjectStore(PAGES_STORE, {
         keyPath: PAGE,
       });
-
       upgradeTxn(request.result);
-      resolve(request.result);
     };
     // Update completed successfully, DB connection is established
     request.onsuccess = () => {
