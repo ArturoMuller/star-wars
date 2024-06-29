@@ -46,7 +46,6 @@ function openConnection(
     request.onsuccess = () => {
       resolve(request.result);
     };
-
     // Something goes wrong during connection opening and / or
     // during version upgrade
     request.onerror = (errorEvent) => {

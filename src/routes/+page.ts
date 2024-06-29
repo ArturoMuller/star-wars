@@ -20,8 +20,8 @@ export async function load({ fetch, url }) {
   const res = await fetch(nextPage);
   const { results, next, previous } = await res.json();
   if (browser) {
-    storePlanets(results, nextPage);
-    storePages({ page: nextPage, next, previous });
+    console.log('test store planet');
+
     dbOps.storePlanets(results, nextPage);
     dbOps.storePages({ page: nextPage, next, previous });
   }
