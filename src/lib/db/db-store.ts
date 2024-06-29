@@ -6,10 +6,7 @@ import {
   PAGES_STORE,
   PEOPLE_STORE,
   PLANET_STORE,
-} from '$lib/store/constants';
-
-let db;
-
+} from '$lib/db/constants';
 export const dbInit: () => Promise<IDBDatabase> = async () => {
   return await openConnection('starWars', 16, (db) => {
     // version change transaction code goes here
@@ -25,8 +22,7 @@ function openConnection(
     const request = indexedDB.open(dbName, version);
     // Version change transaction
     request.onupgradeneeded = function (event) {
-      debugger;
-      db = request.result; // IDBDatabase
+      const db = request.result; // IDBDatabase
       const planetsObjectStore = db.createObjectStore(PLANET_STORE, {
         keyPath: 'url',
       });
@@ -39,7 +35,6 @@ function openConnection(
       peopleObjectStore.createIndex(HOMEPLANET_INDEX, HOMEPLANET, {
         unique: false,
       });
-
       const pagesObjectStore = db.createObjectStore(PAGES_STORE, {
         keyPath: PAGE,
       });
@@ -49,7 +44,6 @@ function openConnection(
     };
     // Update completed successfully, DB connection is established
     request.onsuccess = () => {
-      db = request.result; // IDBDatabase
       resolve(request.result);
     };
 
@@ -68,7 +62,7 @@ function openConnection(
   });
 }
 
-export function addData(storeName, data) {
+export function addData(db, storeName, data) {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(storeName, 'readwrite');
     const store = transaction.objectStore(storeName);
@@ -82,17 +76,13 @@ export function addData(storeName, data) {
       reject(request.error);
     };
 
-    transaction.oncomplete = () => {
-      console.log('Transaction completed: database modification finished.');
-    };
-
     transaction.onerror = () => {
       console.error('Transaction not opened due to error: ', transaction.error);
     };
   });
 }
 
-export function addBulk(storeName, data, page = undefined) {
+export function addBulk(db, storeName, data, page = undefined) {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(storeName, 'readwrite');
     const store = transaction.objectStore(storeName);
@@ -112,7 +102,7 @@ export function addBulk(storeName, data, page = undefined) {
   });
 }
 
-export function getElem(storeName, key) {
+export function getElem(db, storeName, key) {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(storeName, 'readonly');
     const objectStore = transaction.objectStore(storeName);
@@ -133,7 +123,7 @@ export function getElem(storeName, key) {
   });
 }
 
-export function loadPlanets(page) {
+export function loadPage(db, page) {
   return new Promise((resolve, reject) => {
     const txn = db.transaction([PLANET_STORE, PAGES_STORE], 'readonly');
     const planetStore = txn.objectStore(PLANET_STORE);
@@ -158,7 +148,7 @@ export function loadPlanets(page) {
   });
 }
 
-export function getElems(storeName, index, key) {
+export function getElems(db, storeName, index, key) {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(storeName, 'readonly');
     const objectStore = transaction.objectStore(storeName);

@@ -1,4 +1,5 @@
 import { SWAPI_PLANETS } from '$lib/api/endpoints';
+import { dbOps } from '$lib/db/store-utils';
 import { browser } from '$app/environment';
 import { storePages, storePlanets } from '$lib/store/store-utils';
 import { loadPlanets } from '$lib/store/db-store';
@@ -21,6 +22,8 @@ export async function load({ fetch, url }) {
   if (browser) {
     storePlanets(results, nextPage);
     storePages({ page: nextPage, next, previous });
+    dbOps.storePlanets(results, nextPage);
+    dbOps.storePages({ page: nextPage, next, previous });
   }
   if (res.ok) {
     return {

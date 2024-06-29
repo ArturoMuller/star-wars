@@ -1,4 +1,5 @@
 import { SWAPI_PLANETS } from '$lib/api/endpoints';
+import { dbOps } from '$lib/db/store-utils';
 import { browser } from '$app/environment';
 import {
   loadPeople,
@@ -11,8 +12,8 @@ export async function load({ fetch, params }) {
   const planetUrl = `${SWAPI_PLANETS}/${params.id}`;
   if (browser) {
     const cachedResults = await Promise.all([
-      loadPlanet(planetUrl),
-      loadPeople(planetUrl),
+      dbOps.loadPlanet(planetUrl),
+      dbOps.loadPeople(planetUrl),
     ]);
     const [planetData, peopleData] = cachedResults;
     const hasNoResidents = planetData && planetData.residents.length === 0;
@@ -27,10 +28,12 @@ export async function load({ fetch, params }) {
   }
   const res = await fetch(planetUrl);
   const planet = await res.json();
-  const residents = await fetchResidentData(planet.residents);
+  const residents = await fetchResidentData(fetch, planet.residents);
   if (browser) {
     storePlanet(planet);
     storePeople(residents);
+    dbOps.storePlanet(planet);
+    dbOps.storePeople(residents);
   }
   if (res.ok) {
     return {
@@ -44,7 +47,7 @@ export async function load({ fetch, params }) {
   };
 }
 
-async function fetchResidentData(residentUrls) {
+async function fetchResidentData(fetch, residentUrls) {
   if (residentUrls.length === 0) {
     return [];
   }
