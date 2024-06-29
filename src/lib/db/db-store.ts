@@ -115,7 +115,7 @@ export function getElem(db, storeName, key) {
   });
 }
 
-export function loadPage(db, page) {
+export function loadPlanetsByPage(db, page) {
   return new Promise((resolve, reject) => {
     const txn = db.transaction([PLANET_STORE, PAGES_STORE], 'readonly');
     const planetStore = txn.objectStore(PLANET_STORE);

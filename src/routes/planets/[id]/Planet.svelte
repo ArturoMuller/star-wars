@@ -1,44 +1,32 @@
 <script>
 	export let planet;
 	export let residents;
-	const {
-		name,
-		rotation_period,
-		orbital_period,
-		diameter,
-		climate,
-		gravity,
-		terrain,
-		surface_water,
-		population,
-		films,
-	} = planet;
 </script>
 
 <div class="planets">
 		<div class="planet-item">
-			<h1>{name}</h1>
+			<h1>{planet.name}</h1>
 			<div class="planet-fields">
-				<div>Climate: {climate} </div>
-				<div>Gravity: {gravity} </div>
-				<div>Terrain: {terrain} </div>
-				<div>Surface Water: {surface_water} </div>
+				<div>Climate: {planet.climate} </div>
+				<div>Gravity: {planet.gravity} </div>
+				<div>Terrain: {planet.terrain} </div>
+				<div>Surface Water: {planet.surface_water} </div>
 			</div>
 			<div class="planet-fields">
-				<div>Rotational Period: {rotation_period} </div>
-				<div>Orbital Period: {orbital_period} </div>
-				<div>Diameter: {diameter} </div>
-				<div>Climate: {climate} </div>
+				<div>Rotational Period: {planet.rotation_period} </div>
+				<div>Orbital Period: {planet.orbital_period} </div>
+				<div>Diameter: {planet.diameter} </div>
+				<div>Climate: {planet.climate} </div>
 			</div>
 			<div class="planet-fields">
-				<div>Population: {population} </div>
-				<div>Films: {films.length} </div>
+				<div>Population: {planet.population} </div>
+				<div>Films: {planet.films.length} </div>
 			</div>
 			<div class="planet-fields">
 				<div>Residents:
 					{#each residents as { name }, index }
 					<span>
-						{name}{#if index < residents.length - 1}, {/if}{#if index === residents.length - 1}.{/if}
+						      {name}{#if index < residents.length - 1}, {/if}{#if index === residents.length - 1}.{/if}
 					</span>
 					{/each}
 				</div>

@@ -1,8 +1,11 @@
 <script>
 	export let url
 	export let endpoint
-	const match = url.match(/\d+/);
-	const id = match[0];
+	let id
+	$: {
+		const match = url.match(/\d+/);
+		id = match ? match[0] : 'unknown';
+	}
 </script>
 <a href={`${endpoint}/${id}`} class="link-wrapper">
 	<slot></slot>

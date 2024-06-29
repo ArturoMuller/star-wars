@@ -30,7 +30,7 @@ export async function load({ fetch, url }) {
   const nextPage = getPageParam(next);
   const previousPage = getPageParam(previous);
   if (browser) {
-    dbOps.storePlanets(results, nextPage);
+    dbOps.storePlanets(results, currPage);
     dbOps.storePages({ page: currPage, nextPage, previousPage });
   }
   if (res.ok) {

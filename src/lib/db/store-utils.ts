@@ -4,7 +4,7 @@ import {
   dbInit,
   getElem,
   getElems,
-  loadPage,
+  loadPlanetsByPage,
 } from './db-store';
 import {
   HOMEPLANET_INDEX,
@@ -31,14 +31,9 @@ const storePages = async ({ page, nextPage, previousPage }) => {
   return addData(db, PAGES_STORE, { page, nextPage, previousPage });
 };
 
-const storePlanet = async (planet) => {
-  const db = await dbPromise;
-  return addData(db, PLANET_STORE, planet);
-};
-
 const loadPlanets = async (page) => {
   const db = await dbPromise;
-  return loadPage(db, page);
+  return loadPlanetsByPage(db, page);
 };
 
 const loadPlanet = async (page) => {
@@ -59,7 +54,6 @@ const storePeople = async (people) => {
 export const dbOps = {
   storePlanets: storePlanets,
   storePages: storePages,
-  storePlanet: storePlanet,
   loadPlanets: loadPlanets,
   loadPlanet: loadPlanet,
   loadPeople: loadPeople,

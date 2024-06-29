@@ -28,7 +28,6 @@
         flex-direction: column;
         gap: 16px; /* Space between planet items */
     }
-
     .planet-item {
         border: 1px solid #ccc;
         border-radius: 8px;
@@ -43,11 +42,9 @@
         gap: 16px; /* Space between fields */
         flex: 1;
     }
-
     .planet-fields {
         flex: 1; /* Each field takes up an equal amount of space */
     }
-
     h1 {
         margin: 0 0 16px; /* Space between title and fields */
     }

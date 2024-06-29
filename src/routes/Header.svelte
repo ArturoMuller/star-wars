@@ -7,11 +7,7 @@
     </div>
 </header>
 <style>
-    header {
-        background: #B0B0B0;
-        display: flex;
-        justify-content: center;
-    }
+
     .title {
         display: flex;
         align-items: center;

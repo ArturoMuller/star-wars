@@ -24,7 +24,6 @@ export async function load({ fetch, params }) {
   const planet = await res.json();
   const residents = await fetchResidentData(fetch, planet.residents);
   if (browser) {
-    dbOps.storePlanet(planet);
     dbOps.storePeople(residents);
   }
   if (res.ok) {
