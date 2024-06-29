@@ -1,12 +1,6 @@
 import { SWAPI_PLANETS } from '$lib/api/endpoints';
 import { dbOps } from '$lib/db/store-utils';
 import { browser } from '$app/environment';
-import {
-  loadPeople,
-  loadPlanet,
-  storePeople,
-  storePlanet,
-} from '$lib/store/store-utils';
 
 export async function load({ fetch, params }) {
   const planetUrl = `${SWAPI_PLANETS}/${params.id}`;
@@ -30,9 +24,7 @@ export async function load({ fetch, params }) {
   const planet = await res.json();
   const residents = await fetchResidentData(fetch, planet.residents);
   if (browser) {
-    debugger;
     dbOps.storePlanet(planet);
-    debugger;
     dbOps.storePeople(residents);
   }
   if (res.ok) {

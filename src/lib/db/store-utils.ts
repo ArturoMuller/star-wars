@@ -18,7 +18,6 @@ async function setupDb() {
   const dbClient = await dbInit();
   return dbClient;
 }
-debugger;
 
 const dbPromise = browser ? setupDb() : null;
 
