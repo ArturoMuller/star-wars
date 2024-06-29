@@ -86,14 +86,9 @@ export function addBulk(db, storeName, data, page = undefined) {
     const transaction = db.transaction(storeName, 'readwrite');
     const store = transaction.objectStore(storeName);
     const pageParams = page ? { page: page } : {};
-
     for (const item of data) {
       store.put({ ...item, ...pageParams });
     }
-
-    transaction.oncomplete = () => {
-      console.log('Transaction completed: database modification finished.');
-    };
 
     transaction.onerror = () => {
       console.error('Transaction not opened due to error: ', transaction.error);
@@ -134,7 +129,6 @@ export function loadPage(db, page) {
       if (requestPlanet.result && requestPage.result) {
         const results = requestPlanet.result;
         const { next, previous } = requestPage.result;
-        debugger;
         resolve({ results, next, previous });
       } else {
         resolve(undefined);

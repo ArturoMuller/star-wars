@@ -1,7 +1,8 @@
 import { SWAPI_PLANETS } from '$lib/api/endpoints';
 import { dbOps } from '$lib/db/store-utils';
+import { browser } from '$app/environment';
 
-export async function load({ fetch, url, browser }) {
+export async function load({ fetch, url }) {
   const nextPage = url.searchParams.get('page') ?? SWAPI_PLANETS;
   if (browser) {
     const cachedResults = await dbOps.loadPlanets(nextPage);

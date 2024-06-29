@@ -23,7 +23,6 @@ const dbPromise = browser ? setupDb() : null;
 
 const storePlanets = async (planets, page) => {
   const db = await dbPromise;
-  console.log('stored planet');
   return addBulk(db, PLANET_STORE, planets, page);
 };
 
